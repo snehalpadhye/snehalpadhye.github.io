@@ -1,0 +1,80 @@
+body, html {
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Position text in the middle of the page/image */
+.column{
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+  }
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+  } 
+.bg-text {
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+    color: white;
+    font-weight: bold;
+    border: 3px solid #f1f1f1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 80%;
+    padding: 20px;
+    text-align: center;
+}
+
+.demo {
+		color: #fff;
+		font-family:Monospace;
+		font-size:13px;
+		text-align:center;
+    position: relative;
+
+		background-color: #000;
+
+		margin: 0px;
+		overflow: hidden;
+}
+
+.done {
+    position: fixed;
+    margin-left: 43%;
+    margin-top: 110%;
+}
+.no_dent {
+    position: absolute;
+    margin-left: 45%;
+    margin-top: 110%;
+    height:35px;
+}
+
+#result{
+    position: fixed;
+    margin-left: 35%;
+    margin-top: 2%;
+    color: white;
+}
+
+.dent {
+		margin: 0px;
+		background-color: #000000;
+		color: #fff;
+		font-family:Monospace;
+		text-align: center;
+		font-size: 15px;
+		line-height: 30px;
+		overflow: hidden;
+}
