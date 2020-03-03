@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>dent_tis</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/info.css"/>
+		<div id="result"></div>
+	</head>
+
+	<body>
+
+		<div class="dent" id="container"></div>
+		<!-- load javascript libraries and functions we're going to need -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="{{url_for('static', filename='./build/three.js')}}"></script>
+    <script src="{{url_for('static', filename='./js/WebGL.js')}}"></script>
+
+		<script src="{{url_for('static', filename='./js/controls/DeviceOrientationControls.js')}}"></script>
+
+		<script src="{{url_for('static', filename='./js/loaders/RGBELoader.js')}}"></script>
+		<script src="{{url_for('static', filename='./js/loaders/HDRCubeTextureLoader.js')}}"></script>
+
+		<script src="{{url_for('static', filename='./js/pmrem/PMREMGenerator.js')}}"></script>
+		<script src="{{url_for('static', filename='./js/pmrem/PMREMCubeUVPacker.js')}}"></script>
+		<script src="{{url_for('static', filename='./js/geometries/ParametricGeometries.js')}}"></script>
+    <button type="button" class="no_dent">No Dent</button>
+		<script>
+
+			// make sure webGL is available
+			if ( WEBGL.isWebGLAvailable() === false ) {
+				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+				}
+
+			// define some global variables
+			var container;
+			var camera, scene, renderer, controls;
+			var CubeRenderTarget, CubeMap;
+     	var values =[];
+      var dent_position = [];
+      var dent_current_location = {'x':0,'y':0,'z':0};
+
+			// do stuff
+			init();
+			animate();
+
+
+			function init() {
+
+				// create a container for the graphics content
+				container = document.createElement('div');
+				document.body.appendChild(container);
+
+				// create a renderer for the graphics content
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.toneMapping = THREE.ReinhardToneMapping;
+				renderer.gammaOutput = true;
+ 				container.appendChild(renderer.domElement); // attach the renderer to the container
+
+				// create a new graphics scene
+				scene = new THREE.Scene();
+
+				// load a HDR cubemap to serve as the scene background and object illumination map
+				var Urls = [ 'px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr' ];
+				/*CubeMap = new THREE.HDRCubeTextureLoader()
+//					.setPath( '/static/textures/envs/ennis_512/' )
+					.setPath( '/static/textures/envs/artist_workshop_1024/' )
+					.load( THREE.UnsignedByteType, Urls, function() {
+
+						var pmremGenerator = new THREE.PMREMGenerator(CubeMap);
+						pmremGenerator.update(renderer);
+
+						var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
+						pmremCubeUVPacker.update(renderer);
+
+						CubeRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
+
+						CubeMap.magFilter = THREE.LinearFilter;
+						CubeMap.needsUpdate = true;
+
+						pmremGenerator.dispose();
+						pmremCubeUVPacker.dispose();
+
+						});
+				scene.background = CubeMap;
+        */
+          const loader = new THREE.CubeTextureLoader();
+          var texture = loader.load(['static/textures/lab/px.jpg',
+                                     'static/textures/lab/nx.jpg',
+                                     'static/textures/lab/py.jpg',
+                                     'static/textures/lab/ny.jpg',
+                                     'static/textures/lab/pz.jpg',
+                                     'static/textures/lab/nz.jpg',
+
+          ]);
+          scene.background = texture;
+				// create the dent object
+				var xsize = 512;
+				var ysize = 512;
+
+				var meshFunc = function(u,v,target) {
+					var r = Math.random(); // may need this someday
+   					x = xsize * u; // size of plane in x,y
+   					y = ysize * v;
+					  u0 = 0.8; // location of dent
+					  v0 = 0.8;
+            //u0 = {{ form_fields["uv_map"]["u"] }};
+            //v0 = {{ form_fields["uv_map"]["v"] }};
+					usig = 0.025; // width of dent
+					vsig = 0.025;
+					disp = -1.0; // depth/height of dent
+          //disp = {{ form_fields["uv_map"]["disp"] }};
+					uterm = Math.pow(u-u0,2)/Math.pow(2*usig,2); // make the gaussian dent
+					vterm = Math.pow(v-v0,2)/Math.pow(2*vsig,2);
+					z = disp*Math.exp(-(uterm+vterm));
+   					target.set(x,y,z); // return the vals to create the geometry
+  					};
+
+ 				var geometry = new THREE.ParametricBufferGeometry(meshFunc, xsize, ysize);
+ 				geometry.center(); // plane x,y's start at 0 so center in worldspace
+
+// bronze03_green
+				var material = new THREE.MeshStandardMaterial({
+// 					map: new THREE.TextureLoader().load('./objects/bronze03/diff.png'),
+				 	color: new THREE.Color("rgb(10%, 30%, 10%)"),
+					metalness: 0.5,
+//					metalnessMap: new THREE.TextureLoader().load('./objects/bronze03/spec.png'),
+					roughness: 0.33,
+//					roughnessMap: new THREE.TextureLoader().load('./objects/bronze03/rough.png'),
+//					displacementMap: new THREE.TextureLoader().load('./objects/bronze03/disp.png'),
+					normalMap: new THREE.TextureLoader().load('/static/textures/objects/bronze03/norm.png'),
+					normalScale: new THREE.Vector3( 0.5, 0.5 ),
+					side: THREE.DoubleSide
+					});
+
+				objMesh = new THREE.Mesh(geometry, material);
+				scene.add(objMesh);
+
+
+				// add a camera to the scene
+				camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 3000);
+				camera.position.set(0,0,550);
+ 				camera.lookAt(0,0,0);
+
+				// lock the object and camera together
+ 				objMesh.add(camera);
+
+				// add accelerometer controls to the object/camera group
+				controls = new THREE.DeviceOrientationControls(objMesh);
+
+				// add a listener to handle window resizing
+				window.addEventListener( 'resize', onWindowResize, false );
+        window.addEventListener( 'deviceorientation', callback, false );
+        window.addEventListener( 'touchstart', touchstart, false );
+
+			}
+     $("button").click(function(){
+         $.ajax({
+             type: "POST",
+             url: '/test',
+             data: {'post_values': JSON.stringify({'alpha_beta_gamma':values,
+                    })}
+             })},
+             success: function() {
+                 console.log("POST Successful");
+                 //console.log('{{ form_fields["next_page"] }}');
+                 //console.log('{{ form_fields["post_url"] }}');
+                 //window.location.href = '{{ form_fields["next_page"] }}';
+             },
+             fail: function(e) {
+                 console.log("sending failed, error: " + e);
+                 //console.log('form_fields["next_page"]');
+                 //console.log('form_fields["post_url"]');
+             }
+         });
+         //return false;
+     });
+
+     function post(){
+         $.ajax({
+             type: "POST",
+             url: '/test',
+             data: {'post_values': JSON.stringify({'alpha_beta_gamma':values,
+                    'dent_position_response': dent_position,
+                    'params':{"u": 0.8,"v": 0.8,"disp": -1}
+                    }}
+             })},
+             success: function() {
+                 console.log("POST Successful");
+                 //console.log('{{ form_fields["next_page"] }}');
+                 //console.log('{{ form_fields["post_url"] }}');
+                 //window.location.href = '{{ form_fields["next_page"] }}';
+             },
+             fail: function(e) {
+                 console.log("sending failed, error: " + e);
+                 //console.log('form_fields["next_page"]');
+                 //console.log('form_fields["post_url"]');
+             }
+         });
+         //return false;
+     }
+
+			// animation loop
+			function animate() {
+				requestAnimationFrame(animate);
+				controls.update();	// get orientation info from the accelerometer
+				render();
+				}
+
+
+			// scene renderer
+			function render() {
+				var renderTarget, newEnvMap;
+
+				// update the object env map if necessary
+				renderTarget = CubeRenderTarget;
+				newEnvMap = renderTarget ? renderTarget.texture : null;
+				if ( newEnvMap && newEnvMap !== objMesh.material.envMap ) {
+					objMesh.material.envMap = newEnvMap;
+					objMesh.material.needsUpdate = true;
+					}
+
+				// render the scene
+				renderer.render(scene, camera);
+				}
+
+
+			// window resize handler
+			function onWindowResize() {
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+				camera.aspect = width/height;
+				camera.updateProjectionMatrix();
+				renderer.setSize(width, height);
+				}
+
+     function callback(event){
+         values.push({ alpha:event.alpha, beta:event.beta, gamma:event.gamma});
+}
+     function touchstart(event){
+         var touchobj = event.changedTouches[0];
+         var touchX = touchobj.clientX;
+         var touchY = touchobj.clientY;
+         dent_position.push({"x": parseInt(touchX), "y":parseInt(touchY)});
+         var ratioX = parseFloat(touchX/window.innerWidth).toFixed(3);
+         var ratioY = parseFloat(1 - (touchY/window.innerHeight)).toFixed(3);
+         var xNeg = parseFloat(u0 - 3*usig).toFixed(3);
+         var xPos = parseFloat(u0 + 3*usig).toFixed(3);
+         var yNeg = parseFloat(v0 - 3*vsig).toFixed(3);
+         var yPos = parseFloat(v0 + 3*vsig).toFixed(3);
+         //document.getElementById('result').innerHTML = 'x: ' + ratioX + ' y: ' + ratioY + ' dent x:' + u0 + ' v:' + v0 + ' ' + usig + ' ' + vsig;
+         //if (((ratioX < u0 + (usig)) || (ratioX > u0 - (usig))) && ((ratioY < v0 + (vsig)) || (ratioY > v0 - (vsig))))
+         if (((ratioX < xPos) && (ratioX > xNeg)) && ((ratioY < yPos) && (ratioY > yNeg)))
+                 {
+                     //document.getElementById('result').innerHTML = 'x: ' + ratioX + ' y: ' + ratioY + ' u:' + xNeg + ' - ' + xPos + ' v:' + yNeg + ' - ' + yPos;
+                     post();
+                 }
+     }
+    </script>
+
+	</body>
+</html>

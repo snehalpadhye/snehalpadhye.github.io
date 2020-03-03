@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/static/css/info.css"/>
+    </head>
+<body>
+		<script src="{{url_for('static', filename='./build/three.js')}}"></script>
+<div class="bg-text" id="text">
+    <h2>Permission required</h2>
+    Press the following to grant permission to access device orientation.
+    <br><br>
+    <button type="button" height="35px" onclick="testDeviceOrientation()">Grant Permission</button>
+</div>
+<div id="result"></div>
+<script>
+    function testDeviceOrientation() {
+    if (typeof DeviceOrientationEvent !== 'function') {
+    return setResult('DeviceOrientationEvent not detected')
+    }
+    if (typeof DeviceOrientationEvent.requestPermission !== 'function') {
+        window.location.href = "{{ next_page }}";
+    //return setResult('DeviceOrientationEvent.requestPermission not detected')
+    }
+    DeviceOrientationEvent.requestPermission().then(function(result) {
+    //return setResult(result);
+    window.location.href = "{{ next_page }}";
+    });
+    }
+
+    function setResult(result) {
+    document.getElementById('result').innerHTML = result;
+}
+</script>
+</body>
+</html>

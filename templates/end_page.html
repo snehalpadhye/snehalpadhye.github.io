@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/static/css/info.css"/>
+    </head>
+    <body>
+		<script src="{{url_for('static', filename='./build/three.js')}}"></script>
+    <script>
+        var render = function()
+        {
+        requestAnimationFrame( render );
+        renderer.render( scene, camera);
+        }
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight);
+		    renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+        var scene = new THREE.Scene();
+        const loader = new THREE.CubeTextureLoader();
+        var texture = loader.load(['/static/textures/envs/ennis/px.jpg',
+                                '/static/textures/envs/ennis/nx.jpg',
+                                '/static/textures/envs/ennis/py.jpg',
+                                '/static/textures/envs/ennis/ny.jpg',
+                                '/static/textures/envs/ennis/pz.jpg',
+                                '/static/textures/envs/ennis/nz.jpg',
+                                ]);
+				// add a camera to the scene
+				camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 1000);
+				camera.position.set(0, 0, 500);
+        scene.background = texture;
+        render();
+    </script>
+
+    <div class="bg-text" id="text">
+        <h2>{{ form_fields["heading"]}}</h2>
+            {{ form_fields["text"] }}
+            <br><br>
+    </div>
+    </body>
+</html>
