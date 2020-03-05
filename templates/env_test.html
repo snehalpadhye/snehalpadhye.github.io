@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <title>Skybox Background</title>
+    </head>
+    <body>
+    </body>
+    <script src="/static/build/three.js"></script>
+		<script src="{{url_for('static', filename='./js/controls/OrbitControls.js')}}"></script>
+    <script src="three.js-master/three.js-master/examples/js/controls/OrbitControls.js"></script>
+    <script>
+     var render = function()
+     {
+         requestAnimationFrame( render );
+         mesh.rotation.y += 0.01;
+         renderer.render( scene, camera);
+     }
+     var renderer = new THREE.WebGLRenderer();
+     renderer.setSize( window.innerWidth, window.innerHeight);
+		 renderer.setPixelRatio(window.devicePixelRatio);
+     renderer.autoClearColor = false;
+		 renderer.toneMapping = THREE.ReinhardToneMapping;
+		 renderer.gammaInput = true;
+		 renderer.gammaOutput = true;
+     document.body.appendChild(renderer.domElement);
+
+     var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 100);
+     camera.position.set(0, 0, 10);
+
+     const controls = new THREE.OrbitControls(camera, renderer.domElement);
+     controls.target.set(0, 0, 0);
+     controls.update();
+
+     var scene = new THREE.Scene();
+     {
+         const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+         light.position.set(-1, 2, 4);
+         scene.add(light);
+     }
+
+    const loader = new THREE.CubeTextureLoader();
+    var texture = loader.load(['static/textures/lab/px.jpg',
+                               'static/textures/lab/nx.jpg',
+                               'static/textures/lab/py.jpg',
+                               'static/textures/lab/ny.jpg',
+                               'static/textures/lab/pz.jpg',
+                               'static/textures/lab/nz.jpg',
+
+    ]);
+    scene.background = texture;
+
+     var radius = 2;
+     const tube = 1;
+     var radialSegments = 32;
+     var tubularSegments = 64;
+     const p = 2;
+     const q = 3;
+     var sphere = new THREE.TorusKnotBufferGeometry(radius, tube, radialSegments, tubularSegments, p, q);
+     var material = new THREE.MeshBasicMaterial({color: 'white', envMap: texture});
+
+     var mesh = new THREE.Mesh(sphere, material);
+     scene.add(mesh);
+
+     render();
+    </script>
+</html>

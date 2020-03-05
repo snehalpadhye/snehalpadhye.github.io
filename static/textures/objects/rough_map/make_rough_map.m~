@@ -1,0 +1,26 @@
+
+clean;
+
+map_size = 512;
+[u,v] = meshgrid(linspace(0,1,map_size));
+
+% location of dent
+u0 = 0.7;
+v0 = 0.7;
+                    
+% width of dent
+usig = 0.05; 
+vsig = 0.05;
+					
+% depth/height of dent
+disp = -10/100;
+
+% make the gaussian dent
+uterm = ((u-u0).^2)./((2*usig).^2);
+vterm = ((v-v0).^2)./((2*vsig).^2);					
+z = 0.5 + disp.*exp(-(uterm+vterm)); 
+
+imagesc(z);
+
+z_img = uint(z*255);
+
