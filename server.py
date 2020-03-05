@@ -38,6 +38,11 @@ def process_image(filepath):
     im_ro = im_re.rotate(angle=-90)
     im_ro.save(filepath)
 
+@app.route('/env')
+def env():
+    session['counter'] = 1
+    return render_template('env_test.html')
+    #return render_template('project.html', next_page="/project")
 
 @app.route('/test')
 def main():
@@ -47,6 +52,13 @@ def main():
                    'post_url':''}
     return render_template('dent_tis.html', form_fields=form_fields)
 
+@app.route('/test_mirror')
+def mirror():
+    form_fields = {'text': activity_map['calibrate'],
+                   'uv_map': '',
+                   'next_page':'',
+                   'post_url':''}
+    return render_template('dent_tis_mirror.html', form_fields=form_fields)
 @app.route('/project')
 def project():
     form_fields = {'next_page': '/end',
@@ -65,7 +77,8 @@ def post_project_data():
 @app.route('/')
 def permission_page():
     session['counter'] = 1
-    return render_template('permission.html', next_page="/project")
+    return render_template('permission.html', next_page="/test")
+    #return render_template('project.html', next_page="/project")
 
 @app.route('/calibrate')
 def calibrate():
