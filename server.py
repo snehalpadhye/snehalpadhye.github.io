@@ -59,7 +59,7 @@ def mirror():
                    'next_page':'',
                    'post_url':''}
     return render_template('dent_tis_mirror.html', form_fields=form_fields)
-@app.route('/project')
+@app.route('/')
 def project():
     form_fields = {'next_page': '/end',
                    'post_url': '/project'}
@@ -67,14 +67,14 @@ def project():
 
 @app.route('/project_post', methods = {'POST'})
 def post_project_data():
-
-    post_data = request.form['post_values']
-    img = base64.b64decode(post_data['image'])
+    img64 = request.json['img']
+    img = base64.b64decode(img64)
     filename = 'test.jpg'
     with open(filename, 'wb') as f:
         f.write(img)
+    return "ok"
 
-@app.route('/')
+@app.route('/permission')
 def permission_page():
     session['counter'] = 1
     return render_template('permission.html', next_page="/test")
