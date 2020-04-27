@@ -88,12 +88,20 @@
 				scene.background = CubeMap;
        */
           const loader = new THREE.CubeTextureLoader();
-          var texture = loader.load(['static/textures/lab/px.jpg',
+          /*var texture = loader.load(['static/textures/lab/px.jpg',
                                      'static/textures/lab/nx.jpg',
                                      'static/textures/lab/py.jpg',
                                      'static/textures/lab/ny.jpg',
                                      'static/textures/lab/pz.jpg',
                                      'static/textures/lab/nz.jpg',
+
+          ]);*/
+          var texture = loader.load(['static/textures/room/px.jpg',
+                                     'static/textures/room/nx.jpg',
+                                     'static/textures/room/py.jpg',
+                                     'static/textures/room/ny.jpg',
+                                     'static/textures/room/pz.jpg',
+                                     'static/textures/room/nz.jpg',
 
           ]);
           scene.background = texture;
