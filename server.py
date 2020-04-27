@@ -34,7 +34,7 @@ def set_activity_list():
 
 def process_image(filepath):
     im = Image.open(filepath)
-    im_re = im.resize((1024, 1024))
+    im_re = im.resize((2048, 2048))
     im_ro = im_re.rotate(angle=-90)
     im_ro.save(filepath)
 
