@@ -1,8 +1,14 @@
 <!DOCTYPE html>
+<!--
+     code for video as texture demo
+      - derived from code written by Dr James Ferwerda for VSS
+     References: https://threejs.org/examples/
+
+-->
 <html lang="en">
 
 	<head>
-		<title>dent_tis</title>
+		<title>mirror effect to see environment</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/static/css/info.css"/>
@@ -13,17 +19,12 @@
 
 		<div class="dent" id="container"></div>
 		<!-- load javascript libraries and functions we're going to need -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="{{url_for('static', filename='./build/three.js')}}"></script>
     <script src="{{url_for('static', filename='./js/WebGL.js')}}"></script>
 
 		<script src="{{url_for('static', filename='./js/controls/DeviceOrientationControls.js')}}"></script>
 
 		<script src="{{url_for('static', filename='./js/loaders/RGBELoader.js')}}"></script>
-		<script src="{{url_for('static', filename='./js/loaders/HDRCubeTextureLoader.js')}}"></script>
-
-		<script src="{{url_for('static', filename='./js/pmrem/PMREMGenerator.js')}}"></script>
-		<script src="{{url_for('static', filename='./js/pmrem/PMREMCubeUVPacker.js')}}"></script>
 		<script src="{{url_for('static', filename='./js/geometries/ParametricGeometries.js')}}"></script>
 		<script>
 
@@ -36,9 +37,6 @@
 			var container;
 			var camera, scene, renderer, controls;
 			var CubeRenderTarget, CubeMap;
-     	var values =[];
-      var dent_position = [];
-      var dent_current_location = {'x':0,'y':0,'z':0};
 
 			// do stuff
 			init();
@@ -62,53 +60,28 @@
 				// create a new graphics scene
 				scene = new THREE.Scene();
 
-				// load a HDR cubemap to serve as the scene background and object illumination map
-				  var Urls = [ 'px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr' ];
-          /*
-				CubeMap = new THREE.HDRCubeTextureLoader()
-//					.setPath( '/static/textures/envs/ennis_512/' )
-					.setPath( '/static/textures/envs/artist_workshop_1024/' )
-					.load( THREE.UnsignedByteType, Urls, function() {
+        // load images for environment map and apply it as scene background
+        const loader = new THREE.CubeTextureLoader();
+        var texture = loader.load(['static/textures/lab/px.jpg',
+                                    'static/textures/lab/nx.jpg',
+                                    'static/textures/lab/py.jpg',
+                                    'static/textures/lab/ny.jpg',
+                                    'static/textures/lab/pz.jpg',
+                                    'static/textures/lab/nz.jpg',
 
-						var pmremGenerator = new THREE.PMREMGenerator(CubeMap);
-						pmremGenerator.update(renderer);
+        ]);
 
-						var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
-						pmremCubeUVPacker.update(renderer);
+        scene.background = texture;
 
-						CubeRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
-
-						CubeMap.magFilter = THREE.LinearFilter;
-						CubeMap.needsUpdate = true;
-
-						pmremGenerator.dispose();
-						pmremCubeUVPacker.dispose();
-
-						});
-				scene.background = CubeMap;
-       */
-          const loader = new THREE.CubeTextureLoader();
-          var texture = loader.load(['static/textures/lab/px.jpg',
-                                     'static/textures/lab/nx.jpg',
-                                     'static/textures/lab/py.jpg',
-                                     'static/textures/lab/ny.jpg',
-                                     'static/textures/lab/pz.jpg',
-                                     'static/textures/lab/nz.jpg',
-
-          ]);
-          scene.background = texture;
-				// create the dent object
+        // create the dent object
 				var xsize = 512;
 				var ysize = 512;
-
 				var meshFunc = function(u,v,target) {
 					var r = Math.random(); // may need this someday
    					x = xsize * u; // size of plane in x,y
    					y = ysize * v;
 					  u0 = 0.8; // location of dent
 					  v0 = 0.8;
-            //u0 = {{ form_fields["uv_map"]["u"] }};
-            //v0 = {{ form_fields["uv_map"]["v"] }};
 					usig = 0.025; // width of dent
 					vsig = 0.025;
 					disp = -1.0; // depth/height of dent
@@ -121,22 +94,8 @@
 
  				var geometry = new THREE.ParametricBufferGeometry(meshFunc, xsize, ysize);
  				geometry.center(); // plane x,y's start at 0 so center in worldspace
-
-          // bronze03_green
+        // giving mirror like material
         var material = new THREE.MeshBasicMaterial({color: 'white', envMap: texture});
-				/*var material = new THREE.MeshStandardMaterial({
-// 					map: new THREE.TextureLoader().load('./objects/bronze03/diff.png'),
-				 	color: new THREE.Color("rgb(10%, 30%, 10%)"),
-					metalness: 0.5,
-//					metalnessMap: new THREE.TextureLoader().load('./objects/bronze03/spec.png'),
-					  roughness: 0.33,
-            envMap: texture,
-//					roughnessMap: new THREE.TextureLoader().load('./objects/bronze03/rough.png'),
-//					displacementMap: new THREE.TextureLoader().load('./objects/bronze03/disp.png'),
-					normalMap: new THREE.TextureLoader().load('/static/textures/objects/bronze03/norm.png'),
-					normalScale: new THREE.Vector3( 0.5, 0.5 ),
-					side: THREE.DoubleSide
-					});*/
 
 				objMesh = new THREE.Mesh(geometry, material);
 				scene.add(objMesh);
@@ -192,9 +151,6 @@
 				renderer.setSize(width, height);
 				}
 
-     function callback(event){
-         values.push({ alpha:event.alpha, beta:event.beta, gamma:event.gamma});
-}
     </script>
 
 	</body>

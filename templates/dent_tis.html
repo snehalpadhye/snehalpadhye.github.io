@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+manuscript viewer w/ object controls
+(controls hacked from https://threejs.org/examples/#misc_controls_transform)
+jaf - 5/5/19, created
+11/10/19 - jaf - hacked for vss expt
 
+ -->
+
+<html lang="en">
 	<head>
 		<title>dent_tis</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/static/css/info.css"/>
-		<div id="result"></div>
+    <div id="result"></div>
 	</head>
 
 	<body>
@@ -56,6 +63,7 @@
 				renderer.setSize(window.innerWidth, window.innerHeight);
 				renderer.setPixelRatio(window.devicePixelRatio);
 				renderer.toneMapping = THREE.ReinhardToneMapping;
+				renderer.gammaInput = true;
 				renderer.gammaOutput = true;
  				container.appendChild(renderer.domElement); // attach the renderer to the container
 

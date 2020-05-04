@@ -19,7 +19,7 @@ body, html {
   content: "";
   clear: both;
   display: table;
-  } 
+  }
 .bg-text {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
@@ -78,3 +78,14 @@ body, html {
 		line-height: 30px;
 		overflow: hidden;
 }
+/*#cameraView{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+}*/
