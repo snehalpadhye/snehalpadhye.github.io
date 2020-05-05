@@ -26,11 +26,7 @@ def process_image(filepath):
 # method to show initial environment mapping
 @app.route('/test_mirror')
 def mirror():
-    form_fields = {'text': activity_map['calibrate'],
-                   'uv_map': '',
-                   'next_page':'',
-                   'post_url':''}
-    return render_template('dent_tis_mirror.html', form_fields=form_fields)
+    return render_template('env_test.html')
 
 # main method that shows room demo
 @app.route('/')
@@ -38,6 +34,7 @@ def project():
     form_fields = {'next_page': '/end',
                    'post_url': '/project'}
     return render_template('dent_mouse.html', form_fields=form_fields)
+    #return render_template('vrd.html')
 
 # video texture example
 @app.route('/custom')
