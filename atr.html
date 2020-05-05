@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GI - Advanced Checkpoint : Adaptive Log tone reproduction</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/info.css"/>
+    </head>
+    <body>
+        <h1>CSCI 711- Global Illumination</h1>
+        <h2>Ray Tracer</h2>
+        <h3>Advanced Checkpoint</h3>
+        <h4>Submitted by: Snehal Padhye(sp1471@rit.edu)</h4>
+        <p>Adaptive log Tone Reproduction</p>
+        <p>After calculating Ld, I used it by converting back to rgb (first each component
+        is converted to xyz, do adaptive log reproduction and convert back to rgb) and
+        in other case I used it directly as a scale factor similar to Ward. Here are
+        my results along with Ward result for low illumination.</p>
+        <div class="row">
+          <div class="column">
+            <figure>
+            <img src="../static/ward_bg_low.png">
+            <figcaption>Ward Low</figcaption>
+            </figure>
+          </div>
+          <div class="column">
+            <figure>
+            <img src="../static/render_adaptive_rgb.png">
+            <figcaption>Adaptive log (as scale factor)</figcaption>
+            </figure>
+          </div>
+          <div class="column">
+            <figure>
+            <img src="../static/render_adaptive_xyz.png">
+            <figcaption>Adaptive log in rgb</figcaption>
+            </figure>
+          </div>
+        </div>
+    </body>
+</html>
