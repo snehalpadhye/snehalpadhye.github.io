@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Project Details</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: iPortfolio - v1.4.1
+  * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Mobile nav toggle button ======= -->
+  <button type="button" class="mobile-nav-toggle d-xl-none"><i class="icofont-navigation-menu"></i></button>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="assets/img/profile-img-snehal.jpeg" alt="" class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="index.html">Snehal Padhye</a></h1>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="index.html"><i class="bx bx-home"></i> <span>Home</span></a></li>
+          <li><a href="#about"><i class="bx bx-user"></i> <span>About</span></a></li>
+          <li><a href="#resume"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
+          <li class="active"><a href="#portfolio"><i class="bx bx-book-content"></i>Projects</a></li>
+          <li><a href="#services"><i class="bx bx-server"></i>Notes</a></li>
+
+        </ul>
+      </nav><!-- .nav-menu -->
+      <button type="button" class="mobile-nav-toggle d-xl-none"><i class="icofont-navigation-menu"></i></button>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Project Details</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Project Details</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Portfolio Details Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+      <div class="container">
+
+        <div class="portfolio-details-container">
+
+          <div class="owl-carousel portfolio-details-carousel">
+              <video autoplay muted loop src="assets/img/room.mp4" class="img-fluid" alt="">
+              </video >
+          </div>
+
+        </div>
+
+        <div class="portfolio-description">
+            <h2> Capture and render real time illumination</h2>
+            <p>
+Real time global illumination is resource consuming in graphics. It requires identifying
+illumination sources in the scene, evaluating their direct and indirect contribution in the scene, keeping track of the sources and their distribution and
+calculating their effect on the objects at real time. All these step are computationally intensive. People have still demonstrated beautiful and realistic
+scenes with global illumination. One of the techniques used is called light
+maps. It requires us to calculate contribution of each light source in different
+                part of the scene, similar to what we do in Radiosity. Another way is to find
+                dominant illumination using Spherical Harmonics or Irradiance maps.
+There are other methods called Voxel Cone Raytracing and Irradiance Volumes to represent global illumination. In all these methods, we know our
+scenes very well. We know lights and their position in the scene and we can
+apply one of the techniques to find illumination distribution in the scene.
+In our case, we do not know about the user's environment. In such a case,
+                I decided to start with an environment map.</p>
+            <p> An environment map is a representation of a particular environment
+with the help of set of pictures of that environment. There are different
+ways in which environment mapping can be done. I used cube maps to
+generate environment maps. I took 6 images in positive and negative x,y
+and z directions in the real environment and built a cube map out of it. I
+rendered a scene with this cube map and placed an object to see its effect.
+Constructing the real time environment map did add a realistic feeling to
+my rendering as well. The maps could pretty well mimic the environment
+I was standing in and these effects were also reflected on the object in the scene.
+            </p>
+            <p>
+               Having duplicated the user's environment in the rendered scene, the
+               appearance of the object was still due to the static environment. I still had
+               to figure out how to detect and represent dynamic illumination components
+               of the scene. I decided to use my front camera to monitor the scene at real
+               time. Then, I compared each pixel in the frame and in previous frame to
+               find a new (if any) dominant illumination source in the scene. I used light
+               probes to add virtual light in the scene according to the detected illumination
+               source. I track these pixels at real time and simulate the illumination in the
+               virtual scene according to the location and intensity of the detected light in
+               the real scene. I applied these techniques to mimic appearance of a copper
+               plate according to illumination conditions in my room. I have demonstrated the effect of real time
+                environment map and dynamic addition and removal of light in the scene.
+            </p>
+        </div>
+
+      </div>
+    </section><!-- End Portfolio Details Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>iPortfolio</span></strong>
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="assets/vendor/counterup/counterup.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/venobox/venobox.min.js"></script>
+  <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="assets/vendor/typed.js/typed.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
